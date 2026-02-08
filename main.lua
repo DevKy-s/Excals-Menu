@@ -1,4 +1,9 @@
 -- ================== KEY SYSTEM ==================
+game:GetService("StarterGui"):SetCore("SendNotification", {
+    Title = "Excal Menu",
+    Text = "We're doing this in protest against Roblox's moderation; we'll continue using our cheat until they fix it!",
+    Duration = 5
+})
 
 local REAL_KEY = "Jf78sh21nujlaefs@mf.*/af?822f"
 local SITE_URL = "https://excal-menu.netlify.app"
