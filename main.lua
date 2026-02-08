@@ -1,4 +1,136 @@
--- ExcalMenu LocalScript (CPU Friendly, ESP, Backtracking, Aimbot, Backtrack ESP & Shot, Team Filter, Resizable, Debugged, Hitbox Expander/Hider)
+
+local REAL_KEY = "Jf78sh21nujlaefs@mf.*/af?822f"
+local SITE_URL = "https://excal-menu.netlify.app"
+
+
+if not game:IsLoaded() then
+    game.Loaded:Wait()
+end
+
+local TweenService = game:GetService("TweenService")
+local player = game.Players.LocalPlayer
+
+
+local gui = Instance.new("ScreenGui")
+gui.Name = "NeonKeyUI"
+gui.ResetOnSpawn = false
+gui.Parent = player:WaitForChild("PlayerGui")
+
+local frame = Instance.new("Frame")
+frame.Parent = gui
+frame.Size = UDim2.fromScale(0, 0)
+frame.Position = UDim2.fromScale(0.5, 0.5)
+frame.AnchorPoint = Vector2.new(0.5, 0.5)
+frame.BackgroundColor3 = Color3.fromRGB(10, 10, 15)
+frame.BorderSizePixel = 0
+Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 18)
+
+
+local stroke1 = Instance.new("UIStroke", frame)
+stroke1.Color = Color3.fromRGB(170, 90, 255)
+stroke1.Thickness = 2
+stroke1.Transparency = 0.4
+
+local stroke2 = Instance.new("UIStroke", frame)
+stroke2.Color = Color3.fromRGB(120, 40, 255)
+stroke2.Thickness = 6
+stroke2.Transparency = 0.85
+
+
+TweenService:Create(
+    frame,
+    TweenInfo.new(0.7, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
+    {Size = UDim2.fromScale(0.38, 0.32)}
+):Play()
+
+
+task.spawn(function()
+    while frame.Parent do
+        TweenService:Create(stroke2, TweenInfo.new(1.2, Enum.EasingStyle.Sine), {Transparency = 0.6}):Play()
+        task.wait(1.2)
+        TweenService:Create(stroke2, TweenInfo.new(1.2, Enum.EasingStyle.Sine), {Transparency = 0.9}):Play()
+        task.wait(1.2)
+    end
+end)
+
+
+local title = Instance.new("TextLabel", frame)
+title.Size = UDim2.fromScale(1, 0.2)
+title.BackgroundTransparency = 1
+title.Text = "NEON ACCESS"
+title.Font = Enum.Font.GothamBold
+title.TextScaled = true
+title.TextColor3 = Color3.fromRGB(210, 160, 255)
+
+
+local box = Instance.new("TextBox", frame)
+box.Size = UDim2.fromScale(0.85, 0.2)
+box.Position = UDim2.fromScale(0.075, 0.28)
+box.PlaceholderText = "Enter key..."
+box.Text = ""
+box.ClearTextOnFocus = false
+box.Font = Enum.Font.Gotham
+box.TextScaled = true
+box.BackgroundColor3 = Color3.fromRGB(22, 22, 34)
+box.TextColor3 = Color3.fromRGB(255,255,255)
+box.BorderSizePixel = 0
+Instance.new("UICorner", box).CornerRadius = UDim.new(0, 12)
+
+
+local verify = Instance.new("TextButton", frame)
+verify.Size = UDim2.fromScale(0.5, 0.18)
+verify.Position = UDim2.fromScale(0.25, 0.52)
+verify.Text = "VERIFY"
+verify.Font = Enum.Font.GothamBold
+verify.TextScaled = true
+verify.BackgroundColor3 = Color3.fromRGB(140, 80, 220)
+verify.TextColor3 = Color3.fromRGB(255,255,255)
+verify.BorderSizePixel = 0
+Instance.new("UICorner", verify).CornerRadius = UDim.new(0, 14)
+
+
+local getkey = Instance.new("TextButton", frame)
+getkey.Size = UDim2.fromScale(0.5, 0.14)
+getkey.Position = UDim2.fromScale(0.25, 0.74)
+getkey.Text = "GET KEY"
+getkey.Font = Enum.Font.Gotham
+getkey.TextScaled = true
+getkey.BackgroundColor3 = Color3.fromRGB(40, 40, 60)
+getkey.TextColor3 = Color3.fromRGB(200, 170, 255)
+getkey.BorderSizePixel = 0
+Instance.new("UICorner", getkey).CornerRadius = UDim.new(0, 12)
+
+
+getkey.MouseButton1Click:Connect(function()
+    if setclipboard then
+        setclipboard(SITE_URL)
+        getkey.Text = "LINK COPIED"
+        task.wait(1)
+        getkey.Text = "GET KEY"
+    else
+        warn("Clipboard not supported.")
+    end
+end)
+
+
+verify.MouseButton1Click:Connect(function()
+    if box.Text == REAL_KEY then
+        TweenService:Create(frame, TweenInfo.new(0.4), {Size = UDim2.fromScale(0,0)}):Play()
+        task.wait(0.4)
+        gui:Destroy()
+            
+
+        print("Key verified. Script loaded.")
+
+    else
+        verify.Text = "INVALID KEY"
+        verify.BackgroundColor3 = Color3.fromRGB(200, 60, 60)
+        task.wait(0.8)
+        verify.Text = "VERIFY"
+        verify.BackgroundColor3 = Color3.fromRGB(140, 80, 220)
+        box.Text = ""
+    end
+end)
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
@@ -20,13 +152,13 @@ local flyActive = false
 local flyConnection = nil
 local flySpeedValue = 30
 
--- Hitbox variables
+
 local hitboxExpanderActive = false
 local hitboxMultiplier = 2
 local hitboxTransparency = 0.7
 local originalHitboxSizes = {}
 
--- Backtracking variables & settings
+
 local backtrackActive = false
 local backtrackInterval = 0.2
 local backtrackHistory = {}
@@ -55,7 +187,7 @@ local function makeFuturisticButton(btn)
     s.Parent = btn
 end
 
--- Loading Screen Function
+
 local function createLoadingScreen()
     local loadingGui = Instance.new("ScreenGui")
     loadingGui.Name = "ExcalLoadingScreen"
@@ -64,20 +196,20 @@ local function createLoadingScreen()
     loadingGui.DisplayOrder = 999
     loadingGui.Parent = player:WaitForChild("PlayerGui")
     
-    -- Background
+    
     local background = Instance.new("Frame")
     background.Size = UDim2.new(1, 0, 1, 0)
     background.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
     background.BorderSizePixel = 0
     background.Parent = loadingGui
     
-    -- Animated Grid Pattern
+
     local gridPattern = Instance.new("Frame")
     gridPattern.Size = UDim2.new(1, 0, 1, 0)
     gridPattern.BackgroundTransparency = 1
     gridPattern.Parent = background
     
-    -- Create grid lines
+    
     for i = 1, 20 do
         local line = Instance.new("Frame")
         line.Size = UDim2.new(0, 2, 1, 0)
@@ -98,7 +230,7 @@ local function createLoadingScreen()
         line.Parent = gridPattern
     end
     
-    -- Player Info Card (Top Right)
+    
     local playerCard = Instance.new("Frame")
     playerCard.Size = UDim2.new(0, 300, 0, 80)
     playerCard.Position = UDim2.new(1, -350, 0, 80)
@@ -115,7 +247,7 @@ local function createLoadingScreen()
     cardStroke.Thickness = 2
     cardStroke.Parent = playerCard
     
-    -- Player Avatar (Circle)
+    
     local avatarFrame = Instance.new("Frame")
     avatarFrame.Size = UDim2.new(0, 60, 0, 60)
     avatarFrame.Position = UDim2.new(0, 10, 0.5, -30)
@@ -126,7 +258,7 @@ local function createLoadingScreen()
     avatarCorner.CornerRadius = UDim.new(1, 0)
     avatarCorner.Parent = avatarFrame
     
-    -- Player Avatar Image
+    
     local avatarImage = Instance.new("ImageLabel")
     avatarImage.Size = UDim2.new(1, -6, 1, -6)
     avatarImage.Position = UDim2.new(0, 3, 0, 3)
@@ -138,7 +270,7 @@ local function createLoadingScreen()
     avatarImageCorner.CornerRadius = UDim.new(1, 0)
     avatarImageCorner.Parent = avatarImage
     
-    -- Player Name
+    
     local playerNameLabel = Instance.new("TextLabel")
     playerNameLabel.Text = player.Name
     playerNameLabel.Size = UDim2.new(0, 210, 0, 30)
@@ -150,7 +282,7 @@ local function createLoadingScreen()
     playerNameLabel.TextXAlignment = Enum.TextXAlignment.Left
     playerNameLabel.Parent = playerCard
     
-    -- Player Display Name
+    
     local displayNameLabel = Instance.new("TextLabel")
     displayNameLabel.Text = "@" .. player.DisplayName
     displayNameLabel.Size = UDim2.new(0, 210, 0, 20)
@@ -162,14 +294,14 @@ local function createLoadingScreen()
     displayNameLabel.TextXAlignment = Enum.TextXAlignment.Left
     displayNameLabel.Parent = playerCard
     
-    -- Center Container
+    
     local centerContainer = Instance.new("Frame")
     centerContainer.Size = UDim2.new(0, 600, 0, 400)
     centerContainer.Position = UDim2.new(0.5, -300, 0.5, -200)
     centerContainer.BackgroundTransparency = 1
     centerContainer.Parent = background
     
-    -- EXCAL Logo (Big Text)
+    
     local excalLogo = Instance.new("TextLabel")
     excalLogo.Text = "EXCAL"
     excalLogo.Size = UDim2.new(1, 0, 0, 120)
@@ -182,7 +314,7 @@ local function createLoadingScreen()
     excalLogo.TextStrokeColor3 = Color3.fromRGB(100, 0, 200)
     excalLogo.Parent = centerContainer
     
-    -- Gradient effect on EXCAL
+
     local excalGradient = Instance.new("UIGradient")
     excalGradient.Color = ColorSequence.new{
         ColorSequenceKeypoint.new(0, Color3.fromRGB(150, 100, 255)),
@@ -191,7 +323,7 @@ local function createLoadingScreen()
     }
     excalGradient.Parent = excalLogo
     
-    -- Tagline
+    
     local tagline = Instance.new("TextLabel")
     tagline.Text = "Making Cheating Fun Again"
     tagline.Size = UDim2.new(1, 0, 0, 40)
@@ -202,7 +334,7 @@ local function createLoadingScreen()
     tagline.TextSize = 24
     tagline.Parent = centerContainer
     
-    -- Loading Text
+    
     local loadingText = Instance.new("TextLabel")
     loadingText.Text = "▶ Syncing Environment Variables..."
     loadingText.Size = UDim2.new(1, 0, 0, 30)
@@ -214,14 +346,14 @@ local function createLoadingScreen()
     loadingText.TextXAlignment = Enum.TextXAlignment.Left
     loadingText.Parent = centerContainer
     
-    -- Loading Circle Container
+    
     local loadingCircleContainer = Instance.new("Frame")
     loadingCircleContainer.Size = UDim2.new(0, 150, 0, 150)
     loadingCircleContainer.Position = UDim2.new(0.5, -75, 0, 240)
     loadingCircleContainer.BackgroundTransparency = 1
     loadingCircleContainer.Parent = centerContainer
     
-    -- Loading Circle (Rotating)
+    
     local loadingCircle = Instance.new("ImageLabel")
     loadingCircle.Size = UDim2.new(1, 0, 1, 0)
     loadingCircle.BackgroundTransparency = 1
@@ -229,7 +361,7 @@ local function createLoadingScreen()
     loadingCircle.ImageColor3 = Color3.fromRGB(100, 50, 200)
     loadingCircle.Parent = loadingCircleContainer
     
-    -- Percentage Text
+    
     local percentageText = Instance.new("TextLabel")
     percentageText.Text = "0%"
     percentageText.Size = UDim2.new(1, 0, 1, 0)
@@ -239,7 +371,7 @@ local function createLoadingScreen()
     percentageText.TextSize = 40
     percentageText.Parent = loadingCircleContainer
     
-    -- Ping Display
+    
     local pingLabel = Instance.new("TextLabel")
     pingLabel.Text = "🌐 Initializing..."
     pingLabel.Size = UDim2.new(0, 150, 0, 30)
@@ -250,7 +382,7 @@ local function createLoadingScreen()
     pingLabel.TextSize = 16
     pingLabel.Parent = background
     
-    -- Bottom Tip
+    
     local tipLabel = Instance.new("TextLabel")
     tipLabel.Text = "💡 Tip: Press [INSERT] to toggle menu"
     tipLabel.Size = UDim2.new(1, 0, 0, 30)
@@ -261,7 +393,7 @@ local function createLoadingScreen()
     tipLabel.TextSize = 16
     tipLabel.Parent = background
     
-    -- Version Text
+    
     local versionLabel = Instance.new("TextLabel")
     versionLabel.Text = "Version 2.0.0 | Build #2416"
     versionLabel.Size = UDim2.new(0, 300, 0, 20)
@@ -272,7 +404,7 @@ local function createLoadingScreen()
     versionLabel.TextSize = 12
     versionLabel.Parent = background
     
-    -- Animate loading circle rotation
+    
     spawn(function()
         while loadingCircle.Parent do
             loadingCircle.Rotation = loadingCircle.Rotation + 5
@@ -280,7 +412,7 @@ local function createLoadingScreen()
         end
     end)
     
-    -- Simulate loading progress
+    
     spawn(function()
         local loadingStages = {
             {text = "▶ Syncing Environment Variables...", duration = 0.3},
@@ -313,12 +445,12 @@ local function createLoadingScreen()
             wait(stage.duration)
         end
         
-        -- Update ping
+        
         pingLabel.Text = "🌐 " .. math.random(15, 45) .. "ms"
         
         wait(0.5)
         
-        -- Fade out animation
+        
         local fadeOut = TweenService:Create(background, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundTransparency = 1})
         fadeOut:Play()
         
@@ -341,7 +473,7 @@ local function createLoadingScreen()
     return loadingGui
 end
 
--- Hitbox Expander Functions
+
 local function expandHitbox(character)
     if not character then return end
     local hrp = character:FindFirstChild("HumanoidRootPart")
@@ -406,7 +538,7 @@ local function createMenu()
     uiStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
     uiStroke.Parent = mainFrame
     
-    -- Title Bar
+    
     local titleBar = Instance.new("Frame")
     titleBar.Size = UDim2.new(1, 0, 0, 50)
     titleBar.Position = UDim2.new(0, 0, 0, 0)
@@ -418,7 +550,7 @@ local function createMenu()
     titleCorner.CornerRadius = UDim.new(0, 10)
     titleCorner.Parent = titleBar
     
-    -- Title Text
+    
     local titleLabel = Instance.new("TextLabel")
     titleLabel.Name = "Title"
     titleLabel.Text = "EXCAL.XYZ"
@@ -431,7 +563,7 @@ local function createMenu()
     titleLabel.TextXAlignment = Enum.TextXAlignment.Left
     titleLabel.Parent = titleBar
     
-    -- Subtitle
+    
     local subtitleLabel = Instance.new("TextLabel")
     subtitleLabel.Text = "Press [INSERT] to toggle menu"
     subtitleLabel.Size = UDim2.new(1, -30, 0, 15)
@@ -443,7 +575,7 @@ local function createMenu()
     subtitleLabel.TextXAlignment = Enum.TextXAlignment.Left
     subtitleLabel.Parent = titleBar
     
-    -- Close Button
+    
     local closeButton = Instance.new("TextButton")
     closeButton.Size = UDim2.new(0, 30, 0, 30)
     closeButton.Position = UDim2.new(1, -40, 0, 10)
@@ -462,7 +594,7 @@ local function createMenu()
         screenGui.Enabled = false
     end)
     
-    -- Side Menu
+    
     local sideMenu = Instance.new("Frame")
     sideMenu.Size = UDim2.new(0, 150, 1, -50)
     sideMenu.Position = UDim2.new(0, 0, 0, 50)
@@ -470,14 +602,14 @@ local function createMenu()
     sideMenu.BorderSizePixel = 0
     sideMenu.Parent = mainFrame
     
-    -- Content Frame
+    
     local contentFrame = Instance.new("Frame")
     contentFrame.Size = UDim2.new(1, -150, 1, -50)
     contentFrame.Position = UDim2.new(0, 150, 0, 50)
     contentFrame.BackgroundTransparency = 1
     contentFrame.Parent = mainFrame
     
-    -- Player tab content
+    
     local playerContent = Instance.new("Frame")
     playerContent.Size = UDim2.new(1, 0, 1, 0)
     playerContent.BackgroundTransparency = 1
@@ -568,7 +700,7 @@ local function createMenu()
     applyFlyCorner.CornerRadius = UDim.new(0, 6)
     applyFlyCorner.Parent = applyFlyButton
     
-    -- Misc tab content
+    
     local miscContent = Instance.new("ScrollingFrame")
     miscContent.Size = UDim2.new(1, 0, 1, 0)
     miscContent.CanvasSize = UDim2.new(0, 0, 0, 1200)
@@ -603,10 +735,10 @@ local function createMenu()
     local aimbotTeamCheckButton = addMiscButton("Aimbot")
     local orbitButton = addMiscButton("Orbit Nearby Parts")
     
-    -- Hitbox Expander Section
+    
     local hitboxExpanderButton = addMiscButton("Toggle Hitbox Expander")
     
-    -- Hitbox Size Multiplier
+   
     local hitboxSizeLabel = Instance.new("TextLabel")
     hitboxSizeLabel.Text = "Hitbox Size (Multiplier):"
     hitboxSizeLabel.Size = UDim2.new(1, -20, 0, 25)
@@ -637,7 +769,7 @@ local function createMenu()
     
     buttonY = buttonY + 35
     
-    -- Hitbox Transparency
+    
     local hitboxTransparencyLabel = Instance.new("TextLabel")
     hitboxTransparencyLabel.Text = "Hitbox Transparency:"
     hitboxTransparencyLabel.Size = UDim2.new(1, -20, 0, 25)
@@ -728,7 +860,7 @@ local function createMenu()
     targetList.CanvasSize = UDim2.new(0, 0, 0, 40)
     targetList.Parent = backtrackDropdown
     
-    -- Button hover effects
+    
     local function addButtonHover(btn, activeColor, inactiveColor)
         btn.MouseEnter:Connect(function()
             TweenService:Create(btn, TweenInfo.new(0.2), {BackgroundColor3 = activeColor or Color3.fromRGB(0, 170, 240)}):Play()
@@ -745,14 +877,14 @@ local function createMenu()
     addButtonHover(applySpeedButton, Color3.fromRGB(0, 170, 240), Color3.fromRGB(0, 150, 220))
     addButtonHover(applyFlyButton, Color3.fromRGB(0, 170, 240), Color3.fromRGB(0, 150, 220))
     
-    -- Hitbox Expander Button Handler
+   
     hitboxExpanderButton.MouseButton1Click:Connect(function()
         hitboxExpanderActive = not hitboxExpanderActive
         hitboxExpanderButton.BackgroundColor3 = hitboxExpanderActive and Color3.fromRGB(0, 150, 220) or Color3.fromRGB(30, 30, 45)
         updateAllHitboxes()
     end)
     
-    -- Hitbox Size Input Handler
+    
     hitboxSizeInput.FocusLost:Connect(function(enterPressed)
         local size = tonumber(hitboxSizeInput.Text)
         if size and size > 0 and size <= 10 then
@@ -770,7 +902,7 @@ local function createMenu()
         end
     end)
     
-    -- Hitbox Transparency Input Handler
+    
     hitboxTransparencyInput.FocusLost:Connect(function(enterPressed)
         local transparency = tonumber(hitboxTransparencyInput.Text)
         if transparency and transparency >= 0 and transparency <= 1 then
@@ -790,7 +922,7 @@ local function createMenu()
         end
     end)
     
-    -- Monitor new players
+    
     Players.PlayerAdded:Connect(function(p)
         p.CharacterAdded:Connect(function(char)
             wait(0.5)
@@ -800,7 +932,7 @@ local function createMenu()
         end)
     end)
     
-    -- Monitor existing players
+    
     for _, p in pairs(Players:GetPlayers()) do
         if p ~= player then
             p.CharacterAdded:Connect(function(char)
@@ -812,7 +944,7 @@ local function createMenu()
         end
     end
     
-    -- TeamCheck toggle for target selection
+    
     local teamModes = {"All","Enemy","Ally"}
     teamCheckButton.MouseButton1Click:Connect(function()
         local i = table.find(teamModes, backtrackTargetTeamMode)
@@ -862,7 +994,7 @@ local function createMenu()
     Players.PlayerAdded:Connect(function() updateBacktrackTargetList() end)
     Players.PlayerRemoving:Connect(function() updateBacktrackTargetList() end)
     
-    -- ESP Functions
+    
     local function removeChams(character)
         if not character then return end
         if espObjects[character] then
@@ -928,7 +1060,7 @@ local function createMenu()
         updateAllESP()
     end)
     
-    -- Orbit feature
+    
     local function startOrbit()
         if orbitConnection then orbitConnection:Disconnect() end
         orbitConnection = RunService.Heartbeat:Connect(function()
@@ -959,7 +1091,7 @@ local function createMenu()
         if orbitActive then startOrbit() else stopOrbit() end
     end)
     
-    -- Backtracking feature
+    
     local function startBacktrack()
         if backtrackConnection then backtrackConnection:Disconnect() end
         backtrackConnection = RunService.Heartbeat:Connect(function()
@@ -1055,7 +1187,7 @@ local function createMenu()
         end
     end)
     
-    -- Backtrack Shot
+    
     local function getBacktrackShotPosition(target)
         if target and backtrackHistory[target] then
             local now = tick()
@@ -1093,7 +1225,7 @@ local function createMenu()
         end
     end)
     
-    -- Aimbot logic
+    
     UserInputService.InputChanged:Connect(function(input, gp)
         if input.UserInputType == Enum.UserInputType.MouseMovement then
             mouseMoved = true
@@ -1161,7 +1293,7 @@ local function createMenu()
         aimbotNormalButton.BackgroundColor3 = aimbotNormalActive and Color3.fromRGB(0, 150, 220) or Color3.fromRGB(30, 30, 45)
     end)
     
-    -- Input
+    
     UserInputService.InputBegan:Connect(function(input, gameProcessed)
         if gameProcessed then return end
         if input.UserInputType == Enum.UserInputType.MouseButton2 then rightMouseDown = true end
@@ -1181,7 +1313,7 @@ local function createMenu()
         if input.UserInputType == Enum.UserInputType.MouseButton2 then rightMouseDown = false currentTarget = nil end
     end)
     
-    -- Tab switching
+    
     local playerButton = Instance.new("TextButton")
     playerButton.Size = UDim2.new(1, 0, 0, 40)
     playerButton.Position = UDim2.new(0, 0, 0, 0)
